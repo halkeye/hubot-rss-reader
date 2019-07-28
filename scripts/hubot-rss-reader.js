@@ -131,26 +131,29 @@ module.exports = function (robot) {
     }
   });
 
-  robot.respond(/rss\s+(add|register)\s+(https?:\/\/[^\s]+)$/im, (msg) => {
+  robot.respond(/rss\s+(add|register)\s+(https?:\/\/[^\s]+)$/im, async (msg) => {
     const url = msg.match[2].trim();
     lastStateIsError[url] = false;
-    logger.info(`add ${url}`);
-    const room = getRoom(msg);
-    return checker.addFeed(room, url)
-      .then(res => msg.send(res))
-      .then(() => checker.fetch({ url, room }))
-      .then((entries) => {
-        const entryLimit = process.env.HUBOT_RSS_LIMIT_ON_ADD === 'false'
-          ? entries.length
-          : process.env.HUBOT_RSS_LIMIT_ON_ADD - 0;
-        for (const entry of Array.from(entries.splice(0, entryLimit))) {
-          msg.send(entry.toString());
-        }
-        if (entries.length > 0) {
-          msg.send(`${process.env.HUBOT_RSS_HEADER} ${entries.length} entries has been omitted`);
-        }
-      },
-      (err) => {
+    try {
+      logger.info(`add ${url}`);
+      const room = getRoom(msg);
+      const res = await checker.addFeed(room, url);
+      msg.send(res);
+      const entries = await checker.fetch({ url, room });
+      console.log('entries', entries);
+      const entryLimit = process.env.HUBOT_RSS_LIMIT_ON_ADD === 'false'
+        ? entries.length
+        : process.env.HUBOT_RSS_LIMIT_ON_ADD - 0;
+
+      for (const entry of entries.splice(0, entryLimit)) {
+        msg.send(entry.toString());
+      }
+
+      if (entries.length > 0) {
+        msg.send(`${process.env.HUBOT_RSS_HEADER} ${entries.length} entries has been omitted`);
+      }
+    } catch (err) {
+      try {
         msg.send(`[ERROR] ${err}`);
         if (err.message !== 'Not a feed') { return; }
         checker.deleteFeed(room, url)
@@ -158,11 +161,11 @@ module.exports = function (robot) {
             if ((feeds != null ? feeds.length : undefined) < 1) { return; }
             msg.send([`found some Feeds from ${url}`].concat(feeds.map(i => ` * ${i.url}`)).join('\n'));
           });
-      })
-      .catch((err) => {
-        msg.send(`[ERROR] ${err}`);
-        return logger.error(err.stack);
-      });
+      } catch (err2) {
+        msg.send(`[ERROR] ${err2}`);
+        logger.error(err2.stack);
+      }
+    }
   });
 
 
