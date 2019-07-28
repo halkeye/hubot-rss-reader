@@ -21,11 +21,13 @@ module.exports = function ExportedCharsetConvertStream() {
   charsetConvertStream._transform = function Transform(chunk, enc, next) {
     if (charset === null) {
       const m = chunk.toString().match(/<\?xml[^>]* encoding=['"]([^'"]+)['"]/);
-      // eslint-disable-next-line prefer-destructuring
-      charset = m[1];
-      debug(`charset: ${charset}`);
-      if (charset.toUpperCase() !== 'UTF-8') {
-        iconv = new Iconv(charset, 'UTF-8//TRANSLIT//IGNORE');
+      if (m) {
+        // eslint-disable-next-line prefer-destructuring
+        charset = m[1];
+        debug(`charset: ${charset}`);
+        if (charset.toUpperCase() !== 'UTF-8') {
+          iconv = new Iconv(charset, 'UTF-8//TRANSLIT//IGNORE');
+        }
       }
     }
     if (iconv != null) {
