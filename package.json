@@ -1,9 +1,9 @@
 {
-  "name": "hubot-rss-reader",
+  "name": "@halkeye/hubot-rss-reader",
   "private": false,
   "version": "0.8.3",
   "description": "Hubot RSS Reader",
-  "main": "index.coffee",
+  "main": "index.js",
   "scripts": {
     "test": "grunt test"
   },
@@ -12,16 +12,16 @@
     "rss",
     "feed"
   ],
-  "author": "Sho Hashimoto <hashimoto@shokai.org>",
+  "author": "Gavin Mogan <npm@gavinmogan.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/shokai/hubot-rss-reader.git"
+    "url": "git://github.com/halkeye/hubot-rss-reader.git"
   },
   "bugs": {
-    "url": "https://github.com/shokai/hubot-rss-reader/issues"
+    "url": "https://github.com/halkeye/hubot-rss-reader/issues"
   },
-  "homepage": "https://github.com/shokai/hubot-rss-reader",
+  "homepage": "https://github.com/halkeye/hubot-rss-reader",
   "dependencies": {
     "async": "*",
     "bluebird": "*",
