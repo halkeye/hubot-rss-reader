@@ -97,7 +97,7 @@ module.exports = function (robot) {
     return (() => {
       const result = [];
       const object = checker.getAllFeeds();
-      for (const room of object) {
+      for (const room of Object.keys(object)) {
         const feeds = object[room];
         if (room !== entry.args.room && feeds.includes(entry.feed.url)) {
           logger.info(`${entry.title} ${entry.url} => ${room}`);

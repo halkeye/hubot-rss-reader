@@ -38,6 +38,16 @@ describe('RSSChecker', function () {
       await this.rssChecker.fetch('http://shokai.org/blog/feed');
     });
   });
+  describe('methods "getAllFeeds"', () => {
+    it('returns a list of all feeds', async () => {
+      this.timeout(15000);
+      this.rssChecker.addFeed('samplerepo', 'https://github.com/shokai.atom');
+      this.rssChecker.getAllFeeds().should.be.eql({
+        samplerepo: ['https://github.com/shokai.atom'],
+      });
+      this.rssChecker.getFeeds('samplerepo').should.be.eql(['https://github.com/shokai.atom']);
+    });
+  });
 
   describe('methods "check"', () => {
     it('should emit the event "new entry"', async () => {
