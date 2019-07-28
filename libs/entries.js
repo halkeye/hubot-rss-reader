@@ -1,13 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 // Data Store for entries
 
-let Entries;
-module.exports = (Entries = class Entries {
-
+class Entries {
   constructor(robot) {
     this.robot = robot;
     this.prefix = 'hubot-rss-reader:entry:';
@@ -28,4 +21,5 @@ module.exports = (Entries = class Entries {
   include(url) {
     return this.robot.brain.get(this.key(url));
   }
-});
+}
+module.exports = Entries;

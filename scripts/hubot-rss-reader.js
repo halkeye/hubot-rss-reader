@@ -1,13 +1,16 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 // Description:
 //   Hubot RSS Reader
+//
+// Configuration:
+//   HUBOT_RSS_PRINTIMAGE - Consumer key from https://developer.twitter.com/en/apps
+//   HUBOT_RSS_INTERVAL - how often to check for new feeds
+//   HUBOT_RSS_HEADER - RSS Header Emoji (default is "sushi")
+//   HUBOT_RSS_USERAGENT - What useragent to use (default is "hubot-rss-reader/#{package_version}"
+//   HUBOT_RSS_PRINTSUMMARY - should print summary (default is "true")
+//   HUBOT_RSS_PRINTIMAGE - should print image in summary (default is "true")
+//   HUBOT_RSS_PRINTERROR - should print error message (default is "true")
+//   HUBOT_RSS_IRCCOLORS - should  use IRC color message (default is "false")
+//   HUBOT_RSS_LIMIT_ON_ADD - limit printing entries on add new feed. (default is 5)
 //
 // Commands:
 //   hubot rss add https://github.com/shokai.atom
@@ -19,45 +22,42 @@
 // Author:
 //   @shokai
 
-'use strict';
 
-const path       = require('path');
-const _          = require('lodash');
-const debug      = require('debug')('hubot-rss-reader');
-const Promise    = require('bluebird');
-const RSSChecker = require(path.join(__dirname, '../libs/rss-checker'));
-const FindRSS    = Promise.promisify(require('find-rss'));
+const debug = require('debug')('hubot-rss-reader');
 
-//# config
-const package_json = require(path.join(__dirname, '../package.json'));
-if (!process.env.HUBOT_RSS_INTERVAL) { process.env.HUBOT_RSS_INTERVAL = 60*10; }  // 10 minutes
+const util = require('util');
+const FindRSS = util.promisify(require('find-rss'));
+const RSSChecker = require('../libs/rss-checker');
+
+// # config
+const packageJson = require('../package.json');
+
+if (!process.env.HUBOT_RSS_INTERVAL) { process.env.HUBOT_RSS_INTERVAL = 60 * 10; } // 10 minutes
 if (!process.env.HUBOT_RSS_HEADER) { process.env.HUBOT_RSS_HEADER = ':sushi:'; }
-if (!process.env.HUBOT_RSS_USERAGENT) { process.env.HUBOT_RSS_USERAGENT = `hubot-rss-reader/${package_json.version}`; }
-if (!process.env.HUBOT_RSS_PRINTSUMMARY) { process.env.HUBOT_RSS_PRINTSUMMARY = "true"; }
-if (!process.env.HUBOT_RSS_PRINTIMAGE) { process.env.HUBOT_RSS_PRINTIMAGE = "true"; }
-if (!process.env.HUBOT_RSS_PRINTERROR) { process.env.HUBOT_RSS_PRINTERROR = "true"; }
-if (!process.env.HUBOT_RSS_IRCCOLORS) { process.env.HUBOT_RSS_IRCCOLORS = "false"; }
+if (!process.env.HUBOT_RSS_USERAGENT) { process.env.HUBOT_RSS_USERAGENT = `hubot-rss-reader/${packageJson.version}`; }
+if (!process.env.HUBOT_RSS_PRINTSUMMARY) { process.env.HUBOT_RSS_PRINTSUMMARY = 'true'; }
+if (!process.env.HUBOT_RSS_PRINTIMAGE) { process.env.HUBOT_RSS_PRINTIMAGE = 'true'; }
+if (!process.env.HUBOT_RSS_PRINTERROR) { process.env.HUBOT_RSS_PRINTERROR = 'true'; }
+if (!process.env.HUBOT_RSS_IRCCOLORS) { process.env.HUBOT_RSS_IRCCOLORS = 'false'; }
 if (!process.env.HUBOT_RSS_LIMIT_ON_ADD) { process.env.HUBOT_RSS_LIMIT_ON_ADD = 5; }
 
-module.exports = function(robot) {
-
+module.exports = function (robot) {
   const logger = {
     info(msg) {
       if (debug.enabled) { return debug(msg); }
+      // eslint-disable-next-line no-param-reassign
       if (typeof msg !== 'string') { msg = JSON.stringify(msg); }
       return robot.logger.info(`${debug.namespace}: ${msg}`);
     },
     error(msg) {
       if (debug.enabled) { return debug(msg); }
+      // eslint-disable-next-line no-param-reassign
       if (typeof msg !== 'string') { msg = JSON.stringify(msg); }
       return robot.logger.error(`${debug.namespace}: ${msg}`);
-    }
+    },
   };
 
-  const send_queue = [];
-  const send = (envelope, body) => send_queue.push({envelope, body});
-
-  const getRoom = function(msg) {
+  const getRoom = function (msg) {
     switch (robot.adapterName) {
       case 'hipchat':
         return msg.message.user.reply_to;
@@ -66,54 +66,42 @@ module.exports = function(robot) {
     }
   };
 
-  setInterval(function() {
-    if (typeof robot.send !== 'function') { return; }
-    if (send_queue.length < 1) { return; }
-    const msg = send_queue.shift();
-    try {
-      return robot.send(msg.envelope, msg.body);
-    } catch (err) {
-      logger.error(`Error on sending to room: \"${room}\"`);
-      return logger.error(err);
-    }
-  }
-  , 2000);
-
   const checker = new RSSChecker(robot);
 
-  //# wait until connect redis
-  robot.brain.once('loaded', function() {
-    var run = function(opts) {
-      logger.info("checker start");
-      return checker.check(opts)
-      .then(function() {
-        logger.info(`wait ${process.env.HUBOT_RSS_INTERVAL} seconds`);
-        return setTimeout(run, 1000 * process.env.HUBOT_RSS_INTERVAL);
-      }
-      , function(err) {
-        logger.error(err);
-        logger.info(`wait ${process.env.HUBOT_RSS_INTERVAL} seconds`);
-        return setTimeout(run, 1000 * process.env.HUBOT_RSS_INTERVAL);
-      });
-    };
+  // # wait until connect to brain
+  robot.brain.once('loaded', () => {
+    if (process.env.HUBOT_RSS_INTERVAL > 0) {
+      const run = function (opts) {
+        logger.info('checker start');
+        return checker.check(opts)
+          .then(() => {
+            logger.info(`wait ${process.env.HUBOT_RSS_INTERVAL} seconds`);
+            return setTimeout(run, 1000 * process.env.HUBOT_RSS_INTERVAL);
+          },
+          (err) => {
+            logger.error(err);
+            logger.info(`wait ${process.env.HUBOT_RSS_INTERVAL} seconds`);
+            return setTimeout(run, 1000 * process.env.HUBOT_RSS_INTERVAL);
+          });
+      };
 
-    return run();
+      run();
+    }
   });
 
 
-  const last_state_is_error = {};
+  const lastStateIsError = {};
 
-  checker.on('new entry', function(entry) {
-    last_state_is_error[entry.feed.url] = false;
+  checker.on('new entry', (entry) => {
+    lastStateIsError[entry.feed.url] = false;
     return (() => {
       const result = [];
       const object = checker.getAllFeeds();
-      for (let room in object) {
+      for (const room of object) {
         const feeds = object[room];
-        if ((room !== entry.args.room) &&
-           _.includes(feeds, entry.feed.url)) {
+        if (room !== entry.args.room && feeds.includes(entry.feed.url)) {
           logger.info(`${entry.title} ${entry.url} => ${room}`);
-          result.push(send({room}, entry.toString()));
+          result.push(robot.send({ room }, entry.toString()));
         } else {
           result.push(undefined);
         }
@@ -122,105 +110,92 @@ module.exports = function(robot) {
     })();
   });
 
-  checker.on('error', function(err) {
+  checker.on('error', (err) => {
     logger.error(err);
-    if (process.env.HUBOT_RSS_PRINTERROR !== "true") {
+    if (process.env.HUBOT_RSS_PRINTERROR !== 'true') {
       return;
     }
-    if (last_state_is_error[err.feed.url]) {  // reduce error notify
+    if (lastStateIsError[err.feed.url]) { // reduce error notify
       return;
     }
-    last_state_is_error[err.feed.url] = true;
-    return (() => {
-      const result = [];
-      const object = checker.getAllFeeds();
-      for (let room in object) {
-        const feeds = object[room];
-        if (_.includes(feeds, err.feed.url)) {
-          result.push(send({room}, `[ERROR] ${err.feed.url} - ${err.error.message || err.error}`));
-        } else {
-          result.push(undefined);
-        }
+    lastStateIsError[err.feed.url] = true;
+    const result = [];
+    const object = checker.getAllFeeds();
+    for (const room of Object.keys(object)) {
+      const feeds = object[room];
+      if (feeds.includes(err.feed.url)) {
+        result.push(robot.send({ room }, `[ERROR] ${err.feed.url} - ${err.error.message || err.error}`));
+      } else {
+        result.push(undefined);
       }
-      return result;
-    })();
+    }
   });
 
-  robot.respond(/rss\s+(add|register)\s+(https?:\/\/[^\s]+)$/im, function(msg) {
+  robot.respond(/rss\s+(add|register)\s+(https?:\/\/[^\s]+)$/im, (msg) => {
     const url = msg.match[2].trim();
-    last_state_is_error[url] = false;
+    lastStateIsError[url] = false;
     logger.info(`add ${url}`);
     const room = getRoom(msg);
     return checker.addFeed(room, url)
-    .then(res =>
-      new Promise(function(resolve) {
-        msg.send(res);
-        return resolve(url);
-      })).then(url => checker.fetch({url, room}))
-    .then(function(entries) {
-      const entry_limit =
-        process.env.HUBOT_RSS_LIMIT_ON_ADD === 'false' ?
-          entries.length
-        :
-          process.env.HUBOT_RSS_LIMIT_ON_ADD - 0;
-      for (let entry of Array.from(entries.splice(0, entry_limit))) {
-        send({room}, entry.toString());
-      }
-      if (entries.length > 0) {
-        return send({room},
-        `${process.env.HUBOT_RSS_HEADER} ${entries.length} entries has been omitted`);
-      }
-    }
-    , function(err) {
-      msg.send(`[ERROR] ${err}`);
-      if (err.message !== 'Not a feed') { return; }
-      return checker.deleteFeed(room, url)
-      .then(() => FindRSS(url)).then(function(feeds) {
-        if ((feeds != null ? feeds.length : undefined) < 1) { return; }
-        return msg.send(_.flatten([
-          `found some Feeds from ${url}`,
-          feeds.map(i => ` * ${i.url}`)
-        ]).join('\n')
-        );
+      .then(res => msg.send(res))
+      .then(() => checker.fetch({ url, room }))
+      .then((entries) => {
+        const entryLimit = process.env.HUBOT_RSS_LIMIT_ON_ADD === 'false'
+          ? entries.length
+          : process.env.HUBOT_RSS_LIMIT_ON_ADD - 0;
+        for (const entry of Array.from(entries.splice(0, entryLimit))) {
+          msg.send(entry.toString());
+        }
+        if (entries.length > 0) {
+          msg.send(`${process.env.HUBOT_RSS_HEADER} ${entries.length} entries has been omitted`);
+        }
+      },
+      (err) => {
+        msg.send(`[ERROR] ${err}`);
+        if (err.message !== 'Not a feed') { return; }
+        checker.deleteFeed(room, url)
+          .then(() => FindRSS(url)).then((feeds) => {
+            if ((feeds != null ? feeds.length : undefined) < 1) { return; }
+            msg.send([`found some Feeds from ${url}`].concat(feeds.map(i => ` * ${i.url}`)).join('\n'));
+          });
+      })
+      .catch((err) => {
+        msg.send(`[ERROR] ${err}`);
+        return logger.error(err.stack);
       });
-  }).catch(function(err) {
-      msg.send(`[ERROR] ${err}`);
-      return logger.error(err.stack);
-    });
   });
 
 
-  robot.respond(/rss\s+delete\s+(https?:\/\/[^\s]+)$/im, function(msg) {
+  robot.respond(/rss\s+delete\s+(https?:\/\/[^\s]+)$/im, (msg) => {
     const url = msg.match[1].trim();
     logger.info(`delete ${url}`);
     return checker.deleteFeed(getRoom(msg), url)
-    .then(res => msg.send(res)).catch(function(err) {
-      msg.send(err);
-      return logger.error(err.stack);
-    });
+      .then(res => msg.send(res)).catch((err) => {
+        msg.send(err);
+        logger.error(err.stack);
+      });
   });
 
-  robot.respond(/rss\s+delete\s+#([^\s]+)$/im, function(msg) {
+  robot.respond(/rss\s+delete\s+#([^\s]+)$/im, (msg) => {
     const room = msg.match[1].trim();
     logger.info(`delete #${room}`);
     return checker.deleteRoom(room)
-    .then(res => msg.send(res)).catch(function(err) {
-      msg.send(err);
-      return logger.error(err.stack);
-    });
+      .then(res => msg.send(res)).catch((err) => {
+        msg.send(err);
+        logger.error(err.stack);
+      });
   });
 
-  robot.respond(/rss\s+list$/i, function(msg) {
+  robot.respond(/rss\s+list$/i, (msg) => {
     const feeds = checker.getFeeds(getRoom(msg));
     if (feeds.length < 1) {
-      return msg.send("nothing");
-    } else {
-      return msg.send(feeds.join("\n"));
+      return msg.send('nothing');
     }
+    return msg.send(feeds.join('\n'));
   });
 
-  return robot.respond(/rss dump$/i, function(msg) {
+  return robot.respond(/rss dump$/i, (msg) => {
     const feeds = checker.getAllFeeds();
-    return msg.send(JSON.stringify(feeds, null, 2));
+    msg.send(JSON.stringify(feeds, null, 2));
   });
 };

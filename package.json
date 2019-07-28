@@ -5,8 +5,14 @@
   "description": "Hubot RSS Reader",
   "main": "index.coffee",
   "scripts": {
-    "test": "grunt test"
+    "test": "mocha"
   },
+  "files": [
+    "History.txt",
+    "index.js",
+    "libs",
+    "scripts"
+  ],
   "keywords": [
     "hubot",
     "rss",
@@ -23,29 +29,21 @@
   },
   "homepage": "https://github.com/shokai/hubot-rss-reader",
   "dependencies": {
-    "async": "*",
-    "bluebird": "*",
-    "cheerio": "*",
-    "debug": "*",
-    "feedparser": "*",
-    "find-rss": "*",
-    "html-entities": "*",
-    "iconv": "*",
-    "irc-colors": "^1.1.1",
-    "lodash": "*",
-    "request": "*"
+    "cheerio": "^0.22.0",
+    "debug": "^4.1.1",
+    "feedparser": "^2.2.9",
+    "find-rss": "^1.6.4",
+    "html-entities": "^1.2.1",
+    "iconv": "^2.3.4",
+    "irc-colors": "^1.5.0",
+    "request": "^2.88.0"
   },
   "devDependencies": {
-    "coffee-errors": "*",
-    "coffee-script": "^1.10",
-    "coffeelint": "^1.13",
-    "grunt": "*",
-    "grunt-cli": "*",
-    "grunt-coffeelint": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-notify": "*",
-    "grunt-simple-mocha": "*",
-    "hubot-scripts": "*",
-    "mocha": "*"
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "hubot-test-helper": "^1.9.0",
+    "mocha": "^6.2.0",
+    "should": "^13.2.3"
   }
 }
