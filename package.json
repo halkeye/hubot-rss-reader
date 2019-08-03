@@ -1,7 +1,7 @@
 {
   "name": "@halkeye/hubot-rss-reader",
   "private": false,
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Hubot RSS Reader",
   "main": "index.js",
   "scripts": {
