@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+        xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+        xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+        >
+<channel>
+        <title>Prusa3D - 3D Printers from Josef Průša - Feed</title>
+        <atom:link href="https://www.prusa3d.com/feed/mk3s-drivers-rss" rel="self" type="application/rss+xml" />
+        <link>https://www.prusa3d.com</link>
+        <description>Prusa3D is a company started by Josef Průša and manufactures 3D printers.</description>
+        <lastBuildDate>Fri, 02 Aug 2019 14:45:42 +0000</lastBuildDate>
+        <language>en</language>
+        <sy:updatePeriod>hourly</sy:updatePeriod>
+        <sy:updateFrequency>1</sy:updateFrequency>
+        <generator>https://wordpress.org/?v=5.1.1</generator>
+                        <item>
+                        <title>Firmware 3.7.2</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/3-7-2/</link>
+                        <pubDate>Thu, 27 Jun 2019 21:15:42 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=11825</guid>
+                        <description><![CDATA[Firmware - Protection against multiple power panics Autonomous fan self-test Incorrect firmware flashing protection Min. temp safety...]]></description>
+                        <content:encoded><![CDATA[Firmware - Protection against multiple power panics Autonomous fan self-test Incorrect firmware flashing protection Min. temp safety...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Handbook 3.11</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/3-11/</link>
+                        <pubDate>Mon, 20 May 2019 21:54:33 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=11201</guid>
+                        <description><![CDATA[Handbook - PrusaSlicer related updates Spring steel sheets chapters updated Material chapter updated Updates based on firmware...]]></description>
+                        <content:encoded><![CDATA[Handbook - PrusaSlicer related updates Spring steel sheets chapters updated Material chapter updated Updates based on firmware...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Drivers &#038; Apps 2.2.6</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/2-2-6/</link>
+                        <pubDate>Mon, 20 May 2019 19:19:11 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=11154</guid>
+                        <description><![CDATA[Drivers &#038; Apps - Included PrusaSlicer 2.0.0 Read more about new features of PrusaSlicer in our article and check...]]></description>
+                        <content:encoded><![CDATA[Drivers &#038; Apps - Included PrusaSlicer 2.0.0 Read more about new features of PrusaSlicer in our article and check...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Firmware 3.7.1</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/3-7-1/</link>
+                        <pubDate>Mon, 13 May 2019 21:32:57 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=10525</guid>
+                        <description><![CDATA[Firmware - Rambo board overheating fix Bed preheat error fix SPI flash error is not blocking the...]]></description>
+                        <content:encoded><![CDATA[Firmware - Rambo board overheating fix Bed preheat error fix SPI flash error is not blocking the...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Firmware 3.7.0</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/3-7-0-2/</link>
+                        <pubDate>Mon, 01 Apr 2019 20:26:55 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=9969</guid>
+                        <description><![CDATA[Firmware - 7&#215;7 mesh bed levelling (set the density in Settings &#8211; Mesh bed leveling &#8211; Mesh)...]]></description>
+                        <content:encoded><![CDATA[Firmware - 7&#215;7 mesh bed levelling (set the density in Settings &#8211; Mesh bed leveling &#8211; Mesh)...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Drivers &#038; Apps 2.2.5</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/9953/</link>
+                        <pubDate>Fri, 22 Mar 2019 12:42:42 +0000</pubDate>
+                        <dc:creator>Jan Olejnik</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=9953</guid>
+                        <description><![CDATA[Drivers &#038; Apps - Hotfix: A new digital signature added]]></description>
+                        <content:encoded><![CDATA[Drivers &#038; Apps - Hotfix: A new digital signature added]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Drivers &#038; Apps 2.2.4</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/2-2-4-2/</link>
+                        <pubDate>Wed, 13 Mar 2019 13:15:42 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=9806</guid>
+                        <description><![CDATA[Drivers &#038; Apps - Hotfix: EV Code Signing Certificate temporarily disabled]]></description>
+                        <content:encoded><![CDATA[Drivers &#038; Apps - Hotfix: EV Code Signing Certificate temporarily disabled]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Firmware 3.6.0</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/3-6-0-2/</link>
+                        <pubDate>Fri, 01 Mar 2019 14:06:09 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=9653</guid>
+                        <description><![CDATA[Firmware - Smarter load to nozzle/unload/eject function for multi material printers and single material version improved Stop...]]></description>
+                        <content:encoded><![CDATA[Firmware - Smarter load to nozzle/unload/eject function for multi material printers and single material version improved Stop...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Drivers &#038; Apps 2.2.3</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/2-2-3-2/</link>
+                        <pubDate>Tue, 12 Feb 2019 15:18:26 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=8837</guid>
+                        <description><![CDATA[Drivers &#038; Apps - Support for MK2.5S, MK3S and MMU2S (sample objects) New Slic3r PE 1.41.3 Printer profiles for...]]></description>
+                        <content:encoded><![CDATA[Drivers &#038; Apps - Support for MK2.5S, MK3S and MMU2S (sample objects) New Slic3r PE 1.41.3 Printer profiles for...]]></content:encoded>
+                                                                </item>
+                        <item>
+                        <title>Firmware 3.5.3</title>
+                        <link>https://www.prusa3d.com/prusa3d_download/3-5-3/</link>
+                        <pubDate>Tue, 12 Feb 2019 15:21:34 +0000</pubDate>
+                        <dc:creator>Martin Bach</dc:creator>
+                        <guid isPermaLink="false">https://www.prusa3d.com/?post_type=prusa3d_download&#038;p=8840</guid>
+                        <description><![CDATA[Firmware - Initial version]]></description>
+                        <content:encoded><![CDATA[Firmware - Initial version]]></content:encoded>
+                                                                </item>
+        </channel>
+</rss>
