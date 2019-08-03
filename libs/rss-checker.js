@@ -176,13 +176,16 @@ class RSSChecker extends events.EventEmitter {
     return `registered ${url}`;
   }
 
-  deleteFeed(room, url) {
+  async deleteFeed(room, url) {
     const feeds = this.getFeeds(room);
     if (!feeds.includes(url)) {
       throw new Error(`${url} is not registered`);
     }
     feeds.splice(feeds.indexOf(url), 1);
     this.setFeeds(room, feeds);
+    if (feeds.length === 0) {
+      await this.deleteRoom(room);
+    }
     return `deleted ${url}`;
   }
 

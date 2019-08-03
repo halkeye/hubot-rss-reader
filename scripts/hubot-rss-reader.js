@@ -67,6 +67,8 @@ module.exports = function (robot) {
   };
 
   const checker = new RSSChecker(robot);
+  // eslint-disable-next-line no-param-reassign
+  robot.RSSChecker = checker;
 
   // # wait until connect to brain
   robot.brain.once('loaded', () => {
@@ -140,7 +142,6 @@ module.exports = function (robot) {
       const res = await checker.addFeed(room, url);
       msg.send(res);
       const entries = await checker.fetch({ url, room });
-      console.log('entries', entries);
       const entryLimit = process.env.HUBOT_RSS_LIMIT_ON_ADD === 'false'
         ? entries.length
         : process.env.HUBOT_RSS_LIMIT_ON_ADD - 0;
@@ -156,7 +157,7 @@ module.exports = function (robot) {
       try {
         msg.send(`[ERROR] ${err}`);
         if (err.message !== 'Not a feed') { return; }
-        checker.deleteFeed(room, url)
+        checker.deleteFeed(getRoom(msg), url)
           .then(() => FindRSS(url)).then((feeds) => {
             if ((feeds != null ? feeds.length : undefined) < 1) { return; }
             msg.send([`found some Feeds from ${url}`].concat(feeds.map(i => ` * ${i.url}`)).join('\n'));
@@ -197,7 +198,7 @@ module.exports = function (robot) {
     return msg.send(feeds.join('\n'));
   });
 
-  return robot.respond(/rss dump$/i, (msg) => {
+  robot.respond(/rss dump$/i, (msg) => {
     const feeds = checker.getAllFeeds();
     msg.send(JSON.stringify(feeds, null, 2));
   });
