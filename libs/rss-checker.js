@@ -166,7 +166,7 @@ class RSSChecker extends events.EventEmitter {
     this.robot.brain.set('feeds', feeds);
   }
 
-  addFeed(room, url) {
+  async addFeed(room, url) {
     const feeds = this.getFeeds(room);
     if (feeds.includes(url)) {
       throw new Error(`${url} is already registered`);
@@ -179,6 +179,7 @@ class RSSChecker extends events.EventEmitter {
   async deleteFeed(room, url) {
     const feeds = this.getFeeds(room);
     if (!feeds.includes(url)) {
+      debug(`Feeds for ${room}: ${JSON.stringify(feeds)}`);
       throw new Error(`${url} is not registered`);
     }
     feeds.splice(feeds.indexOf(url), 1);

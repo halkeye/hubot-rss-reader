@@ -175,7 +175,7 @@ module.exports = function (robot) {
     logger.info(`delete ${url}`);
     return checker.deleteFeed(getRoom(msg), url)
       .then(res => msg.send(res)).catch((err) => {
-        msg.send(err);
+        msg.send(`Error: ${err.message}`);
         logger.error(err.stack);
       });
   });
