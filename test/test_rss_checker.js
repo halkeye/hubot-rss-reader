@@ -1,16 +1,29 @@
+const path = require('path');
 const should = require('should');
 const Helper = require('hubot-test-helper');
+const nock = require('nock');
+
 const RSSChecker = require('../libs/rss-checker.js');
 
 const scriptHelper = new Helper('../libs/rss-checker.js');
-
+nock.disableNetConnect();
 
 describe('RSSChecker', function () {
   beforeEach(() => {
+    nock('https://github.com')
+      .get('/shokai.atom')
+      .replyWithFile(200, path.join(__dirname, 'fixtures', 'shokai.atom'), { 'Content-Type': 'application/atom+xml; charset=utf-8' });
+    nock('http://shokai.org')
+      .get('/blog/feed')
+      .times(5)
+      .replyWithFile(200, path.join(__dirname, 'fixtures', 'shokai.blog.feed'), { 'Content-Type': 'application/rss+xml; charset=utf-8' });
     this.room = scriptHelper.createRoom({ httpd: false });
     this.rssChecker = new RSSChecker(this.room.robot);
   });
-  afterEach(() => { this.room.destroy(); });
+  afterEach(() => {
+    this.room.destroy();
+    nock.cleanAll();
+  });
 
   describe('method "fetch"', () => {
     it('should emit the event "new entry", and callback entries Array', async () => {
