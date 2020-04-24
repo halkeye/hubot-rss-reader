@@ -34,7 +34,7 @@
     "feedparser": "^2.2.9",
     "find-rss": "^1.6.4",
     "html-entities": "^1.2.1",
-    "iconv": "^2.3.4",
+    "iconv": "^3.0.0",
     "irc-colors": "^1.5.0",
     "request": "^2.88.0"
   },
